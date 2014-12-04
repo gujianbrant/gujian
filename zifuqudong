@@ -1,0 +1,43 @@
+#include<linux/types.h>
+#include<linux/fs.h>
+#include<linux/mm.h>
+#include<linux/errno.h>
+#include<asm/segment.h>
+#include<asm/uaccess.h>
+#include<linux/module.h>
+
+unsigned int test_major=0;
+
+static int read_test(struct inode *node,struct file *file,char *buf,int count)
+{
+  int left;
+  if(access_ok(VERIFY_WEITE,buf,count))
+  for(left=count;left>0;left--)
+  {
+      _put_user('a',buf);
+      buf++;
+  }
+  return count;
+}
+
+static int write_test(struct inode *inode,struct file *file,const char *buf,int count)
+{
+    //33
+    return count;
+}
+
+static int open_test(struct inode *inode,struct file *file)
+{
+    //36
+    //MOD_INC_USE_COUNT;  /*模块计数加1，表示当前有个设备加载到内核当中*/
+    try_module_get(THIS_MODULE);
+    return 0;
+}
+
+static void release_test(struct inode *inode,struct file *file)
+{
+    //41
+    //MOD_DEC_USE_COUNT; 
+    module_put(THIS_MODULE);
+}
+
