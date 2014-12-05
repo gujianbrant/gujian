@@ -72,3 +72,6 @@ void cleanup_module(void)
 
 obj-m:=test.o
 KERNELDIR:=/usr/src/kernels/2.6.27.25-78.2.56.fc9.i686
+PWD:=$(shell pwd)
+default:
+$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
