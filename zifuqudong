@@ -41,3 +41,34 @@ static void release_test(struct inode *inode,struct file *file)
     module_put(THIS_MODULE);
 }
 
+struct file_operations test_fops=
+{
+    .owner=THIS_MODULE,
+    .read=read_test,
+    .write=write_test,
+    .open=open_test,
+    .release=release_test,
+};
+
+int init_module(void)
+{
+    int result;
+    result=register_chrdev(0,"test",&test_fops);
+    if(result<0)
+    {
+        printk(KERN_INFO "test:can't get major number\n");
+        return result;
+    }
+    
+    if(test_major==0)
+    test_major=result;
+    return 0;
+}
+
+void cleanup_module(void)
+{
+    unregister_chrdev(test_major,"test");
+}
+
+obj-m:=test.o
+KERNELDIR:=/usr/src/kernels/2.6.27.25-78.2.56.fc9.i686
