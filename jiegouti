@@ -1,0 +1,14 @@
+/*struct block_device_operations结构体*/
+struct block_device_operations
+{
+  int (*open) (struct inode *, struct file *);/*打开设备*/
+  int(*release) (struct inode *, struct file *);/*释放*/
+  int(*ioct1) (struct inode *, struct file *, unsigned, unsigned long);/*系统调用的实现*/
+  long(*unlocked_ioct1) (struct file *, unsigned, unsigned long);
+  long(*compat_ioct1) (struct file *,unsigned, unsigned long);
+  int(*direct_access) (struct block_device *, sector_t, unsigned long *);
+  int(*media_changed) (struct gendisk *);/*用于检查驱动器介质是否改变*/
+  int(*revalidate_disk) (struct gendisk *);/*使介质有效*/
+  int(*getgeo) (struct block_device *, struct hd_geometry *);/*填充驱动器信息*/
+  struct module *owner;/*模块拥有者*/
+};
