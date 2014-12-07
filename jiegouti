@@ -12,3 +12,33 @@ struct block_device_operations
   int(*getgeo) (struct block_device *, struct hd_geometry *);/*填充驱动器信息*/
   struct module *owner;/*模块拥有者*/
 };
+
+/*struct gendisk结构体*/
+struct gendisk
+{
+    int major;
+    int first_minor;
+    int minors;
+    char disk_name[32];
+    struct hd_struct **part;
+    int part_uevent_suppress;
+    struct block_device_operations *fops;
+    struct request_queue *queue;
+    void *private_date;
+    sector_t capacity;
+    int flags;
+    char devfs_name[64];
+    int number;
+    struct device *driverfs_dev;
+    struct kobject kobj;
+    struct timer_rand_state *random;
+    int policy;
+    atomic_t sync_io;
+    unsigned long stamp,stamp_idle;
+    int in_flight;
+    #ifdef CONFIG_SMP
+    struct disk_stats *dkstats;
+    #else
+    struct disk_states dkstats;
+    #endif
+};
