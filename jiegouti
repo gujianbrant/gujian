@@ -16,17 +16,17 @@ struct block_device_operations
 /*struct gendisk结构体*/
 struct gendisk
 {
-    int major;
-    int first_minor;
-    int minors;
-    char disk_name[32];
-    struct hd_struct **part;
+    int major;/*主设备号*/
+    int first_minor;/*第一个次设备号*/
+    int minors;/*最大次设备号数量，如果设备不能分区，该值为1*/
+    char disk_name[32];/*主设备名*/
+    struct hd_struct **part;/*分区信息*/
     int part_uevent_suppress;
-    struct block_device_operations *fops;
-    struct request_queue *queue;
-    void *private_date;
-    sector_t capacity;
-    int flags;
+    struct block_device_operations *fops;/*设备操作结构体*/
+    struct request_queue *queue;/*设备请求队列*/
+    void *private_date;/*私有数据*/
+    sector_t capacity;/*扇区数*/
+    int flags;/*设置驱动器状态的标志*/
     char devfs_name[64];
     int number;
     struct device *driverfs_dev;
