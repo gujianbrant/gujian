@@ -42,3 +42,30 @@ struct gendisk
     struct disk_states dkstats;
     #endif
 };
+
+struct gendisk *alloc_disk(int minors);/*分配磁盘*/
+void add_disk(struct gendisk *disk);/*激活磁盘*/
+void del_gendisk(struct gendisk *gp);/*卸载磁盘*/
+static inline void set_capacity(struct gendisk *disk,sector_t size);/*设置容量*/
+void blk_queue_hardsect_size(request_queue_t *q,unsigned short size);/*设置扇区大小*/
+
+/*struct request_queue结构体*/
+struct request_queue
+{
+    struct list_head queue_head;
+    struct request *last_merge;
+    elevator_t elevator;
+    request_fn_proc *request_fn;
+    merge_request_fn *back_merge_fn;
+    merge_request_fn *front_merge_fn;
+    merge_requests_fn *merge_requests_fn;
+    make_request_fn *make_request_fn;
+    prep_rq_fn *prep_rq_fn;
+    unplug_fn *unplug_fn;
+    merge_bvec_fn *merge_bvec_fn;
+    activity_fn *activity_fn;
+    struct timer_list unplug_timer;
+    int unplug_thresh;
+    unsigned long unplug_delay;
+    
+}
