@@ -67,5 +67,28 @@ struct request_queue
     struct timer_list unplug_timer;
     int unplug_thresh;
     unsigned long unplug_delay;
-    
-}
+    struct work_struct unplug_work;
+    struct backing_dev_info backing_dev_info;
+    void *queuedata;
+    void *activity_data;
+    unsigned long bounce_pfn;
+    int bounce_gfp;
+    unsigned long queue_flags;
+    spinlock_t queue_lock;
+    struct kobject kobj;
+    unsigned long nr_requests;
+    unsigned int nr_congestion_on;
+    unsigned int nr_congestion_off;
+    unsigned short max_sectors;
+    unsigned short max_phys_segments;
+    unsigned short max_hw_segments;
+    unsigned short hardsect_size;
+    unsigned int max_segment_size;
+    unsigned long seg_boundery_mask;
+    unsigned int dma_alignment;
+    struct blk_queue_tag *queus_tags;
+    atomic_t int refcnt;
+    unsigned int in_flight;
+    unsigned int sg_timeout;
+    unsigned int sg_reserved_size;
+};
