@@ -92,3 +92,13 @@ struct request_queue
     unsigned int sg_timeout;
     unsigned int sg_reserved_size;
 };
+
+struct hd_struct
+{
+    sector_t start_sect;
+    sector_t nr_sects;
+    struct kobject kobj;
+    unsigned reads,read_sectors,writes,write_sectors;
+    int policy,partno;
+};
+
