@@ -93,6 +93,7 @@ struct request_queue
     unsigned int sg_reserved_size;
 };
 
+/*struct hd_struct结构体*/
 struct hd_struct
 {
     sector_t start_sect;
@@ -100,5 +101,27 @@ struct hd_struct
     struct kobject kobj;
     unsigned reads,read_sectors,writes,write_sectors;
     int policy,partno;
+};
+
+/*struct bio结构体*/
+{
+    sector_t bi_sector;
+    struct bio *bi_next;
+    struct block_device *bi_bdev;
+    unsigned long bi_flags;
+    unsigned long bi_rw;
+    unsigned short bi_vcnt;
+    unsigned short bi_idx;
+    unsigned short bi_phys_segments;
+    unsigned short bi_hw_segments;
+    unsigned int bi_size;
+    unsigned int bi_hw_front_size;
+    unsigned int bi_hw_back_size;
+    unsigned int bi_max_vecs;
+    struct bio_vec *bi_io_vec;
+    bio_end_io_t *bi_end_io;
+    atmoic_t bi_cnt;
+    void *bi_private;
+    bio_destructor_t *bi_destructor;
 };
 
