@@ -74,15 +74,15 @@ struct request_queue
     unsigned long bounce_pfn;
     int bounce_gfp;
     unsigned long queue_flags;
-    spinlock_t queue_lock;
+    spinlock_t queue_lock;/*保护队列结构体的自旋锁*/
     struct kobject kobj;
-    unsigned long nr_requests;
+    unsigned long nr_requests;/*最大请求数量*/
     unsigned int nr_congestion_on;
     unsigned int nr_congestion_off;
-    unsigned short max_sectors;
+    unsigned short max_sectors;/*最大的扇区数*/
     unsigned short max_phys_segments;
     unsigned short max_hw_segments;
-    unsigned short hardsect_size;
+    unsigned short hardsect_size;/*硬件扇区尺寸*/
     unsigned int max_segment_size;
     unsigned long seg_boundery_mask;
     unsigned int dma_alignment;
@@ -106,22 +106,42 @@ struct hd_struct
 /*struct bio结构体*/
 {
     sector_t bi_sector;
-    struct bio *bi_next;
+    struct bio *bi_next;/*请求队列链表*/
     struct block_device *bi_bdev;
-    unsigned long bi_flags;
+    unsigned long bi_flags;/*状态、命令等*/
     unsigned long bi_rw;
-    unsigned short bi_vcnt;
-    unsigned short bi_idx;
+    unsigned short bi_vcnt;/*bio_vec个数*/
+    unsigned short bi_idx;/*bvl_vec的当前索引*/
     unsigned short bi_phys_segments;
     unsigned short bi_hw_segments;
-    unsigned int bi_size;
+    unsigned int bi_size;/*剩余I/O数量*/
     unsigned int bi_hw_front_size;
     unsigned int bi_hw_back_size;
-    unsigned int bi_max_vecs;
-    struct bio_vec *bi_io_vec;
+    unsigned int bi_max_vecs;/*最多可持有的bvl_vec数量*/
+    struct bio_vec *bi_io_vec;/*实际的矢量表*/
     bio_end_io_t *bi_end_io;
     atmoic_t bi_cnt;
     void *bi_private;
-    bio_destructor_t *bi_destructor;
+    bio_destructor_t *bi_destructor;/*销毁器*/
 };
 
+/*struct block_device结构体*/
+{
+    dev_t bd_dev;
+    struct indo *bd_inode;/*分区节点*/
+    int bd_openers;
+    struct semaphore bd_sem;/*打开/关闭锁*/
+    struct semaphore bd_mount_sem;/*加载互斥锁*/
+    struct list_head bd_inodes;
+    void * bd_holders;
+    int bd_holders;
+    struct block_device * bd_contains;
+    unsigned bd_block_size;/*分区块大小*/
+    struct hd_struct * bd_part;
+    unsigned bd_part_count;/*打开次数*/
+    int bd_invalidated;
+    struct gendisk * bd_disk;
+    struct list_head bd_list;
+    struct backing_dev_info *hd_inode_backing_dev_info;
+    unsigned long bd_private;
+};
