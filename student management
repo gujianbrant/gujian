@@ -1,0 +1,39 @@
+/*node.h*/
+#ifndef_NODE
+#define_NODE
+struct student
+{
+    long num;
+    char name[20];
+    char sex[10];
+    int score[3];
+    int total;
+    int rank;
+};
+typedef struct student type;
+const int sizestu=sizeogz(type);
+struct node
+{
+    type data;
+    struct node *next;
+};
+const int size=sizeof(struct node);
+#endif
+
+/*prepare.h*/
+#ifndef_PREP
+#define_PREP
+#include "node.h"
+#include<string.h>
+void printnode(type data)
+{
+    int i;
+    printf("%8ld",data.num);
+    printf("%8s",data.name);
+    printf("%8s",data.sex);
+    for(i=0;i<3;i++)
+        printf("%6d",data.score[i]);
+    printf("%7d",data.total);
+    printf("%5d\n",data.rank);
+}
+
